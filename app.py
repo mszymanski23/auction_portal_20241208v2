@@ -6,12 +6,11 @@ import csv
 from flask import send_file
 import io
 import locale
-from babel.numbers import format_currency, format_number
-#from decimal import Decimal, ROUND_DOWN
+from babel.numbers import format_currency, format_number, format_decimal
+from decimal import Decimal, ROUND_DOWN
 
 app = Flask(__name__)
 #locale.setlocale(locale.LC_ALL, 'pl_PL.UTF-8')
-locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 # Set up logging
 logger = logging.getLogger()
@@ -36,7 +35,7 @@ logger.addHandler(file_handler)
 
 # Lista użytkowników
 users = ['telekom1', 'telekom2', 'telekom3', 'telekom4']
-start_price_value = locale.format_string('%.0f', 356000, grouping=True)
+start_price_value = 356000
 logged_in_users = {}
 
 start_price_value = 356000 
@@ -397,12 +396,16 @@ def export_my_bids(username):
     )
 
 def format_price(price):
-    # Zaokrąglij cenę do najbliższej liczby całkowitej
-    #price = Decimal(price).quantize(Decimal('1'), rounding=ROUND_DOWN)
-    #return format_currency(price, 'PLN', locale='pl_PL')
-    formatted_price = format_number(price, locale='pl_PL')
-    return f"{formatted_price} zł"
+    #formatted_price = format_number(price, locale='pl_PL')
+    #formatted_number = f"{price[:-3]} {price[-3:]}"
+    #return f"{formatted_number} zł"
     #return format_currency(price, 'PLN', locale='pl_PL' , currency_digits=False , decimal_quantization=False) , format='#,##0 ¤'
+    
+        # Convert the integer to a string
+    price_str = str(price)
+    # Format the string with a space before the last three digits
+    formatted_number = f"{price_str[:-3]} {price_str[-3:]} zł"
+    return formatted_number
 
 @app.template_filter('format_price')
 def format_price_filter(value):
