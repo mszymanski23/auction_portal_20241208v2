@@ -7,7 +7,7 @@ from flask import send_file
 import io
 import locale
 from babel.numbers import format_currency, format_number
-from decimal import Decimal, ROUND_DOWN
+#from decimal import Decimal, ROUND_DOWN
 
 app = Flask(__name__)
 locale.setlocale(locale.LC_ALL, 'pl_PL.UTF-8')
