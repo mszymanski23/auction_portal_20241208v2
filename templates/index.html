@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Auction Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 220px;
+            background-color: #5a2d82; /* Play's purple color */
+            color: white;
+            padding: 1rem;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0;
+        }
+        .sidebar a:hover {
+            background-color: #7a3da3; /* Slightly lighter purple for hover effect */
+        }
+        .content {
+            margin-left: 240px;
+            padding: 1rem;
+        }
+        .bg-primary {
+            background-color: #5a2d82 !important; /* Play's purple color */
+        }
+        .btn-primary {
+            background-color: #5a2d82;
+            border-color: #5a2d82;
+        }
+        .btn-primary:hover {
+            background-color: #7a3da3;
+            border-color: #7a3da3;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <div class="sidebar">
+            <h2>Auction System</h2>
+        </div>
+        <div class="content container">
+            <header class="bg-primary text-white text-center py-3 mb-4">
+                <h1>Auction system login panel</h1>
+            </header>
+            
+            <div class="mb-4">
+                <p>Welcome to the Auction System! Please select your username from the list below to log in. If the auction has already started, you will not be able to log in. Users who are already logged in or excluded from the auction will be indicated accordingly.</p>
+            </div>
+            
+            {% if auction_status == 'running' %}
+                <div class="alert alert-warning" role="alert">
+                    The auction has already started. You cannot log in anymore.
+                </div>
+            {% endif %}
+            
+            <div class="list-group">
+                {% for user in users %}
+                    {% if auction_status == 'running' %}
+                        <a href="#" class="list-group-item list-group-item-action disabled">{{ user }} <span class="badge bg-danger">Auction Running</span></a>
+                    {% elif user in logged_in_users %}
+                        <a href="#" class="list-group-item list-group-item-action disabled">{{ user }} <span class="badge bg-success">Logged in</span></a>
+                    {% elif logged_in_users.get(user, {}).get('active', True) == False %}
+                        <a href="#" class="list-group-item list-group-item-action disabled">{{ user }} <span class="badge bg-danger">Excluded</span></a>
+                    {% else %}
+                        <a href="{{ url_for('login', username=user) }}" class="list-group-item list-group-item-action">{{ user }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            <form action="/start_automatic_auction" method="POST">
+                <label for="delay">Delay Time (minutes):</label>
+                <input type="number" id="delay" name="delay" value="2" min="1" required>
+                
+                <label for="round_time">Round Duration (seconds):</label>
+                <input type="number" id="round_time" name="round_time" value="60" min="10" required>
+                
+                <button type="submit">Start Automatic Auction Process</button>
+            </form>
+
+            
+        </div>
+    </div>
+    <footer class="bg-light text-center py-3 mt-4">
+        <p>&copy; 2024 Auction System All Rights Reserved powered by marcin.szymanski2@play.pl</p>
+        <p>&copy; Build 1.0 2024/12/05</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-wH5Fg56z8INExb5w/RM2KH8mVbLgRT0WpODBaF+eYnOZZjVGGRtP9QQ9ojwGMVq3" 
+        crossorigin="anonymous"></script>
+</body>
+</html>
