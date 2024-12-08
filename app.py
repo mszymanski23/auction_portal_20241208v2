@@ -10,7 +10,8 @@ from babel.numbers import format_currency, format_number
 #from decimal import Decimal, ROUND_DOWN
 
 app = Flask(__name__)
-locale.setlocale(locale.LC_ALL, 'pl_PL.UTF-8')
+#locale.setlocale(locale.LC_ALL, 'pl_PL.UTF-8')
+locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 # Set up logging
 logger = logging.getLogger()
